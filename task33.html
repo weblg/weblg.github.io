@@ -1,0 +1,133 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="Keywords" content="blog"/>
+    <meta name="Description" content="blog"/>
+    <title>Simple</title>
+    <link rel="shortcut icon" href="/static/favicon.png"/>
+    <link rel="stylesheet" type="text/css" href="/main.css" />
+</head>
+<body>
+<div class="main">
+    <div class="header">
+    	<ul id="pages">
+            <li><a href="/">home</a></li>
+            <li><a href="/#/tags">tags</a></li>
+            <li><a href="/#/archive">archive</a></li>
+    	</ul>
+    </div>
+	<div class="wrap-header">
+	<h1>
+    <a href="/" id="title"></a>
+	</h1>
+	</div>
+<div id="md" style="display: none;">
+<!-- markdown -->
+#ife_33任务小结
+
+###在这里记录下做百度前端任务的点点滴滴，对自己是一种激励，也希望对别人有所帮助。
+###任务要求：
+通过在输入框中输入指令，实现小方块的移动。
+
+1. 布局：此处可考虑用table来布局，将有文本的地方填上对应的文本即可。为了文本的布局合理，用到文字垂直居中的知识，此链接给了我很大的启发：[文本垂直居中](http://jingyan.baidu.com/article/bea41d437497a0b4c51be697.html)。
+
+2. 若想让某个div在页面上居中，可使用margin:0 auto;但有时无效，是因为没有设置宽度。
+
+3. div在移动的过程中，设置每次移动的距离为一个单元格的宽度，但此时应考虑，div自身的margin，以及表格的border-width。
+
+4. 点击让div旋转，除了使用：targetDiv.style.transform='rotate(' + angle+ 'deg)';外还可以设置不同的样式，通过点击切换此div的类名来实现。
+
+5. 逻辑一定要清楚，先实现移动，进而实现旋转，并将二者结合。
+
+<!-- markdown end -->
+</div>
+<div class="entry" id="main">
+<!-- content -->
+<h1 id="ife_33">ife_33任务小结</h1>
+
+<h3 id="">在这里记录下做百度前端任务的点点滴滴，对自己是一种激励，也希望对别人有所帮助。</h3>
+
+<h3 id="">任务要求：</h3>
+
+<p>通过在输入框中输入指令，实现小方块的移动。</p>
+
+<ol>
+<li><p>布局：此处可考虑用table来布局，将有文本的地方填上对应的文本即可。为了文本的布局合理，用到文字垂直居中的知识，此链接给了我很大的启发：<a href="http://jingyan.baidu.com/article/bea41d437497a0b4c51be697.html">文本垂直居中</a>。</p></li>
+<li><p>若想让某个div在页面上居中，可使用margin:0 auto;但有时无效，是因为没有设置宽度。</p></li>
+<li><p>div在移动的过程中，设置每次移动的距离为一个单元格的宽度，但此时应考虑，div自身的margin，以及表格的border-width。</p></li>
+<li><p>点击让div旋转，除了使用：targetDiv.style.transform='rotate(' + angle+ 'deg)';外还可以设置不同的样式，通过点击切换此div的类名来实现。</p></li>
+<li><p>逻辑一定要清楚，先实现移动，进而实现旋转，并将二者结合。</p></li>
+</ol>
+<!-- content end -->
+</div>
+<br>
+<br>
+    <div id="disqus_thread"></div>
+	<div class="footer">
+		<p>© Copyright 2014 by isnowfy, Designed by isnowfy</p>
+	</div>
+</div>
+<script src="main.js"></script>
+<script id="content" type="text/mustache">
+    <h1>{{title}}</h1>
+    <div class="tag">
+    {{date}}
+    {{#tags}}
+    <a href="/#/tag/{{name}}">#{{name}}</a>
+    {{/tags}}
+    </div>
+</script>
+<script id="pagesTemplate" type="text/mustache">
+    {{#pages}}
+    <li>
+        <a href="{{path}}">{{title}}</a>
+    </li>
+    {{/pages}}
+</script>
+<script>
+$(document).ready(function() {
+    $.ajax({
+        url: "main.json",
+        type: "GET",
+        dataType: "json",
+        success: function(data) {
+            $("#title").html(data.name);
+            var pagesTemplate = Hogan.compile($("#pagesTemplate").html());
+            var pagesHtml = pagesTemplate.render({"pages": data.pages});
+            $("#pages").append(pagesHtml);
+            //path
+            var path = "task33.html";
+            //path end
+            var now = 0;
+            for (var i = 0; i < data.posts.length; ++i)
+                if (path == data.posts[i].path)
+                    now = i;
+            var post = data.posts[now];
+            var tmp = post.tags.split(" ");
+            var tags = [];
+            for (var i = 0; i < tmp.length; ++i)
+                if (tmp[i].length > 0)
+                    tags.push({"name": tmp[i]});
+            var contentTemplate = Hogan.compile($("#content").html());
+            var contentHtml = contentTemplate.render({"title": post.title, "tags": tags, "date": post.date});
+            $("#main").prepend(contentHtml);
+            if (data.disqus_shortname.length > 0) {
+                var disqus_shortname = data.disqus_shortname;
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            }
+        }
+    });
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ["\\(", "\\)"]], processEscapes: true}});
+</script>
+</body>
+</html>
