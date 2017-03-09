@@ -1,0 +1,196 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="Keywords" content="blog"/>
+    <meta name="Description" content="blog"/>
+    <title>Simple</title>
+    <link rel="shortcut icon" href="/static/favicon.png"/>
+    <link rel="stylesheet" type="text/css" href="/main.css" />
+</head>
+<body>
+<div class="main">
+    <div class="header">
+    	<ul id="pages">
+            <li><a href="/">home</a></li>
+            <li><a href="/#/tags">tags</a></li>
+            <li><a href="/#/archive">archive</a></li>
+    	</ul>
+    </div>
+	<div class="wrap-header">
+	<h1>
+    <a href="/" id="title"></a>
+	</h1>
+	</div>
+<div id="md" style="display: none;">
+<!-- markdown -->
+#div拖拽功能的实现
+1. 思路：div此刻的位置left/top=鼠标的坐标（横坐标/纵坐标）-此div相对于浏览器的上边距/左边距；
+2. 要特别注意代码中加粗的部分，明确到底获取的是哪个对象的宽度/高度，或者哪个对象相对于浏览器的左边距或上边距；因为有的拖拽是拖整个div均可实现；有的是通过拖拽标题栏实现；
+3. 至于加粗的numx与numy，在我们的div设置了margin的情况下应考虑。
+4. 编写过程中可能会出现各种问题，此链接让我受益匪浅：[拖拽]:http://www.jb51.net/article/60304.htm
+4. 点击整个div的实现拖拽，代码如下：
+>function(obj){
+  var disX=0,
+  disY=0,
+  timer=null;
+  obj.onmousedown=function(event){
+    var that=this;
+    var e=event||window.event;
+    disX=e.clientX-**that**.offsetLeft;//鼠标点击与左边距的距离
+    disY=e.clientY-**that**.offsetTop;
+    document.onmousemove=function(event){
+      //疏忽了鼠标移动事件
+      var e=event||window.event;
+      tempX=e.clientX-disX;
+      tempY=e.clientY-disY;
+      var width=document.documentElement.clientWidth-**obj**.offsetWidth;
+      var height=document.documentElement.clientHeight-**obj**.offsetHeight;
+      clearTimeout(timer);
+      if(tempX>width){
+        tempX=width;
+      }else if(tempX<0){
+        tempX=0;
+      }
+      if(tempY>height){
+        tempY=height;
+      }else if(tempY<0){
+        tempY=0;
+      }
+      that.style.left=tempX+**numx**+"px";//忘记加像素
+      that.style.top=tempY+**numy**+"px";
+    };
+    document.onmouseup=function(event){
+      document.onmouseup=null;
+      document.onmousemove=null;
+    };
+    return false;
+  };
+};
+
+
+<!-- markdown end -->
+</div>
+<div class="entry" id="main">
+<!-- content -->
+<h1 id="div">div拖拽功能的实现</h1>
+
+<p></p><ol>
+<li>思路：div此刻的位置left/top=鼠标的坐标（横坐标/纵坐标）-此div相对于浏览器的上边距/左边距；</li>
+<li>要特别注意代码中加粗的部分，明确到底获取的是哪个对象的宽度/高度，或者哪个对象相对于浏览器的左边距或上边距；因为有的拖拽是拖整个div均可实现；有的是通过拖拽标题栏实现；</li>
+<li>至于加粗的numx与numy，在我们的div设置了margin的情况下应考虑。</li>
+<li>编写过程中可能会出现各种问题，此链接让我受益匪浅：[拖拽]:http://www.jb51.net/article/60304.htm</li>
+<li>点击整个div的实现拖拽，代码如下：<p></p>
+
+<blockquote>
+  <p>function(obj){
+  var disX=0,
+  disY=0,
+  timer=null;
+  obj.onmousedown=function(event){
+  var that=this;
+  var e=event||window.event;
+  disX=e.clientX-<strong>that</strong>.offsetLeft;//鼠标点击与左边距的距离
+  disY=e.clientY-<strong>that</strong>.offsetTop;
+  document.onmousemove=function(event){
+    //疏忽了鼠标移动事件
+    var e=event||window.event;
+    tempX=e.clientX-disX;
+    tempY=e.clientY-disY;
+    var width=document.documentElement.clientWidth-<strong>obj</strong>.offsetWidth;
+    var height=document.documentElement.clientHeight-<strong>obj</strong>.offsetHeight;
+    clearTimeout(timer);
+    if(tempX&gt;width){
+      tempX=width;
+    }else if(tempX&lt;0){
+      tempX=0;
+    }
+    if(tempY&gt;height){
+      tempY=height;
+    }else if(tempY&lt;0){
+      tempY=0;
+    }
+    that.style.left=tempX+<strong>numx</strong>+"px";//忘记加像素
+    that.style.top=tempY+<strong>numy</strong>+"px";
+  };
+  document.onmouseup=function(event){
+    document.onmouseup=null;
+    document.onmousemove=null;
+  };
+  return false;
+  };
+  };</p></blockquote></li>
+  </ol><p></p>
+
+<!-- content end -->
+</div>
+<br>
+<br>
+    <div id="disqus_thread"></div>
+	<div class="footer">
+		<p>© Copyright 2014 by isnowfy, Designed by isnowfy</p>
+	</div>
+</div>
+<script src="main.js"></script>
+<script id="content" type="text/mustache">
+    <h1>{{title}}</h1>
+    <div class="tag">
+    {{date}}
+    {{#tags}}
+    <a href="/#/tag/{{name}}">#{{name}}</a>
+    {{/tags}}
+    </div>
+</script>
+<script id="pagesTemplate" type="text/mustache">
+    {{#pages}}
+    <li>
+        <a href="{{path}}">{{title}}</a>
+    </li>
+    {{/pages}}
+</script>
+<script>
+$(document).ready(function() {
+    $.ajax({
+        url: "main.json",
+        type: "GET",
+        dataType: "json",
+        success: function(data) {
+            $("#title").html(data.name);
+            var pagesTemplate = Hogan.compile($("#pagesTemplate").html());
+            var pagesHtml = pagesTemplate.render({"pages": data.pages});
+            $("#pages").append(pagesHtml);
+            //path
+            var path = "drag.html";
+            //path end
+            var now = 0;
+            for (var i = 0; i < data.posts.length; ++i)
+                if (path == data.posts[i].path)
+                    now = i;
+            var post = data.posts[now];
+            var tmp = post.tags.split(" ");
+            var tags = [];
+            for (var i = 0; i < tmp.length; ++i)
+                if (tmp[i].length > 0)
+                    tags.push({"name": tmp[i]});
+            var contentTemplate = Hogan.compile($("#content").html());
+            var contentHtml = contentTemplate.render({"title": post.title, "tags": tags, "date": post.date});
+            $("#main").prepend(contentHtml);
+            if (data.disqus_shortname.length > 0) {
+                var disqus_shortname = data.disqus_shortname;
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            }
+        }
+    });
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ["\\(", "\\)"]], processEscapes: true}});
+</script>
+</body>
+</html>
