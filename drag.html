@@ -80,7 +80,8 @@
   myDivRB.className='resizable-RB resizable-box';
 
 （2）在拖拽这些div的时候，一方面要注意父元素的宽度/高度的变化；另一方面要注意其它两个新添加div的位置变动；部分代码如下所示：
-> switch(type){
+> 
+    switch(type){
       case 'r':
       obj.style.left=tempX+'px';
       **parent.style.width=tempX+'px';**
@@ -98,7 +99,8 @@
       **obj2.style.top=tempY+'px';**
       break;
     }
-3. 详细代码见我的github仓库：
+
+
 <!-- markdown end -->
 </div>
 <div class="entry" id="main">
@@ -168,26 +170,27 @@
   myDivBot.className='resizable-bottom resizable-box';
   myDivRB.className='resizable-RB resizable-box';</p></blockquote></li>
   </ol>
-  （2）在拖拽这些div的时候，一方面要注意父元素的宽度/高度的变化；另一方面要注意其它两个新添加div的位置变动；部分代码如下所示：
-  switch(type){
-        case 'r':
-        obj.style.left=tempX+'px';
-        <strong>parent.style.width=tempX+'px';</strong>
-        <strong>obj1.style.left=tempX+'px';break;</strong>
-        case 'b':
-        obj.style.top=tempY+'px';
-        <strong>parent.style.height=tempY+'px';</strong>
-        obj1.style.top=tempY+'px';break;
-        case 'br':
-        obj.style.top=tempY+'px';
-        <strong>parent.style.height=tempY+'px';</strong>
-        obj.style.left=tempX+'px';
-        <strong>parent.style.width=tempX+'px';</strong>
-        <strong>obj1.style.left=tempX+'px';</strong>
-        <strong>obj2.style.top=tempY+'px';</strong>
-        break;
-      }
-  3. 详细代码见我的github仓库：<p></p>
+  （2）在拖拽这些div的时候，一方面要注意父元素的宽度/高度的变化；另一方面要注意其它两个新添加div的位置变动；部分代码如下所示：<p></p>
+
+<pre><code>switch(type){
+  case 'r':
+  obj.style.left=tempX+'px';
+  **parent.style.width=tempX+'px';**
+  **obj1.style.left=tempX+'px';break;**
+  case 'b':
+  obj.style.top=tempY+'px';
+  **parent.style.height=tempY+'px';**
+  obj1.style.top=tempY+'px';break;
+  case 'br':
+  obj.style.top=tempY+'px';
+  **parent.style.height=tempY+'px';**
+  obj.style.left=tempX+'px';
+  **parent.style.width=tempX+'px';**
+  **obj1.style.left=tempX+'px';**
+  **obj2.style.top=tempY+'px';**
+  break;
+}
+</code></pre>
 
 <!-- content end -->
 </div>
