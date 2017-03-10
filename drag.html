@@ -25,7 +25,8 @@
 	</div>
 <div id="md" style="display: none;">
 <!-- markdown -->
-#div拖拽功能的实现
+#div拖拽移动以及拖拽边缘来放大缩小窗口的功能实现
+##拖拽功能的实现
 1. 思路：div此刻的位置left/top=鼠标的坐标（横坐标/纵坐标）-此div相对于浏览器的上边距/左边距；
 2. 要特别注意代码中加粗的部分，明确到底获取的是哪个对象的宽度/高度，或者哪个对象相对于浏览器的左边距或上边距；因为有的拖拽是拖整个div均可实现；有的是通过拖拽标题栏实现；
 3. 至于加粗的numx与numy，在我们的div设置了margin的情况下应考虑。
@@ -68,13 +69,43 @@
     return false;
   };
 };
+##拖拽边缘放大缩小窗口的实现
+1. 思路：可以按照拖拽div的基本原理实现拖拽边缘实现窗口的放大缩小；同样需要响应鼠标事件：onmousedown,onmousemove,onmouseup;这里我主要实现了向右，向下以及向右下三种方向拖拽窗口；
+2. 注意：（1）要实现拖拽，首先应该创建可以响应拖拽事件的div，并给其添加class,此class中包含对此div的样式描述，最后给其添加鼠标按下等事件；相应代码如下：
+> var **myDivRig**=document.createElement('div');
+  var **myDivBot**=document.createElement('div');
+  var **myDivRB**=document.createElement('div');
+  myDivRig.className='resizable-right resizable-box';
+  myDivBot.className='resizable-bottom resizable-box';
+  myDivRB.className='resizable-RB resizable-box';
 
-
+（2）在拖拽这些div的时候，一方面要注意父元素的宽度/高度的变化；另一方面要注意其它两个新添加div的位置变动；部分代码如下所示：
+> switch(type){
+      case 'r':
+      obj.style.left=tempX+'px';
+      **parent.style.width=tempX+'px';**
+      **obj1.style.left=tempX+'px';break;**
+      case 'b':
+      obj.style.top=tempY+'px';
+      **parent.style.height=tempY+'px';**
+      obj1.style.top=tempY+'px';break;
+      case 'br':
+      obj.style.top=tempY+'px';
+      **parent.style.height=tempY+'px';**
+      obj.style.left=tempX+'px';
+      **parent.style.width=tempX+'px';**
+      **obj1.style.left=tempX+'px';**
+      **obj2.style.top=tempY+'px';**
+      break;
+    }
+3. 详细代码见我的github仓库：
 <!-- markdown end -->
 </div>
 <div class="entry" id="main">
 <!-- content -->
-<h1 id="div">div拖拽功能的实现</h1>
+<h1 id="div">div拖拽移动以及拖拽边缘来放大缩小窗口的功能实现</h1>
+
+<h2 id="">拖拽功能的实现</h2>
 
 <p></p><ol>
 <li>思路：div此刻的位置left/top=鼠标的坐标（横坐标/纵坐标）-此div相对于浏览器的上边距/左边距；</li>
@@ -84,7 +115,7 @@
 <li>点击整个div的实现拖拽，代码如下：<p></p>
 
 <blockquote>
-  <p>function(obj){
+  function(obj){
   var disX=0,
   disY=0,
   timer=null;
@@ -120,8 +151,43 @@
   };
   return false;
   };
-  };</p></blockquote></li>
-  </ol><p></p>
+  };</blockquote></li>
+  </ol>
+  <h2 id="">拖拽边缘放大缩小窗口的实现</h2>
+
+
+<p></p><ol>
+<li>思路：可以按照拖拽div的基本原理实现拖拽边缘实现窗口的放大缩小；同样需要响应鼠标事件：onmousedown,onmousemove,onmouseup;这里我主要实现了向右，向下以及向右下三种方向拖拽窗口；</li>
+<li>注意：（1）要实现拖拽，首先应该创建可以响应拖拽事件的div，并给其添加class,此class中包含对此div的样式描述，最后给其添加鼠标按下等事件；相应代码如下：<p></p>
+
+<blockquote>
+  <p>var <strong>myDivRig</strong>=document.createElement('div');
+  var <strong>myDivBot</strong>=document.createElement('div');
+  var <strong>myDivRB</strong>=document.createElement('div');
+  myDivRig.className='resizable-right resizable-box';
+  myDivBot.className='resizable-bottom resizable-box';
+  myDivRB.className='resizable-RB resizable-box';</p></blockquote></li>
+  </ol>
+  （2）在拖拽这些div的时候，一方面要注意父元素的宽度/高度的变化；另一方面要注意其它两个新添加div的位置变动；部分代码如下所示：
+  switch(type){
+        case 'r':
+        obj.style.left=tempX+'px';
+        <strong>parent.style.width=tempX+'px';</strong>
+        <strong>obj1.style.left=tempX+'px';break;</strong>
+        case 'b':
+        obj.style.top=tempY+'px';
+        <strong>parent.style.height=tempY+'px';</strong>
+        obj1.style.top=tempY+'px';break;
+        case 'br':
+        obj.style.top=tempY+'px';
+        <strong>parent.style.height=tempY+'px';</strong>
+        obj.style.left=tempX+'px';
+        <strong>parent.style.width=tempX+'px';</strong>
+        <strong>obj1.style.left=tempX+'px';</strong>
+        <strong>obj2.style.top=tempY+'px';</strong>
+        break;
+      }
+  3. 详细代码见我的github仓库：<p></p>
 
 <!-- content end -->
 </div>
