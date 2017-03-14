@@ -1,0 +1,171 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="Keywords" content="blog"/>
+    <meta name="Description" content="blog"/>
+    <title>Simple</title>
+    <link rel="shortcut icon" href="/static/favicon.png"/>
+    <link rel="stylesheet" type="text/css" href="/main.css" />
+</head>
+<body>
+<div class="main">
+    <div class="header">
+    	<ul id="pages">
+            <li><a href="/">home</a></li>
+            <li><a href="/#/tags">tags</a></li>
+            <li><a href="/#/archive">archive</a></li>
+    	</ul>
+    </div>
+	<div class="wrap-header">
+	<h1>
+    <a href="/" id="title"></a>
+	</h1>
+	</div>
+<div id="md" style="display: none;">
+<!-- markdown -->
+#UI之排序表格
+在这里总结做此任务的大体思路，以及在编写过程中遇到的问题，方便以后查阅。
+
+1. 编写思路：
+
+（1）首先创建渲染表格所需要的数据；
+
+（2）渲染表格时，显示表头，之后是内容，然后给表头添加箭头，同时添加点击箭头的事件；
+
+（3）添加事件的机理：获取当前点击列的原有数据，并对其进行排序获得新数据，比较新数据与原数据是否在数组同样的位置，不一样则交换。交换的是数据在原数据中的索引位置，及在排好数的新数据中的位置。
+
+2.要注意的问题：
+
+（1）获取table的单元格有现成的属性：table.rows[0].cells；
+
+（2）在给表格添加内容的过程中，只添加进了最后一组数，原因：
+
+var tr=addtr();
+table.appendChild(tr);
+//因为只添加了这么一次，应该改为：局部函数中：
+
+addtd(i,mytr,tableData.tdData[i]);
+table.appendChild(mytr);
+
+//在每个循环里面都去添加。
+
+//像这样每创建一个tr就去添加,即每创建一行就去用table添加，否则只有最后一行可以添加上。
+
+//谨记：要添加多少次就得创建多少次
+
+（3）非常重要的一点：按照什么规则去交换表格中某两行的数据：应该交换的是此数在排序好后新数组种的位置，及当前它在DOM中的位置。
+每次循环应重新获取当前点击列数字的排列顺序。但在交换完之后应该清空，否则会出错。
+
+
+<!-- markdown end -->
+</div>
+<div class="entry" id="main">
+<!-- content -->
+<h1 id="ui">UI之排序表格</h1>
+
+<p>在这里总结做此任务的大体思路，以及在编写过程中遇到的问题，方便以后查阅。</p>
+
+<ol>
+<li>编写思路：</li>
+</ol>
+
+<p>（1）首先创建渲染表格所需要的数据；</p>
+
+<p>（2）渲染表格时，显示表头，之后是内容，然后给表头添加箭头，同时添加点击箭头的事件；</p>
+
+<p>（3）添加事件的机理：获取当前点击列的原有数据，并对其进行排序获得新数据，比较新数据与原数据是否在数组同样的位置，不一样则交换。交换的是数据在原数据中的索引位置，及在排好数的新数据中的位置。</p>
+
+<p>2.要注意的问题：</p>
+
+<p>（1）获取table的单元格有现成的属性：table.rows[0].cells；</p>
+
+<p>（2）在给表格添加内容的过程中，只添加进了最后一组数，原因：</p>
+
+<p>var tr=addtr();
+table.appendChild(tr);
+//因为只添加了这么一次，应该改为：局部函数中：</p>
+
+<p>addtd(i,mytr,tableData.tdData[i]);
+table.appendChild(mytr);</p>
+
+<p>//在每个循环里面都去添加。</p>
+
+<p>//像这样每创建一个tr就去添加,即每创建一行就去用table添加，否则只有最后一行可以添加上。</p>
+
+<p>//谨记：要添加多少次就得创建多少次</p>
+
+<p>（3）非常重要的一点：按照什么规则去交换表格中某两行的数据：应该交换的是此数在排序好后新数组种的位置，及当前它在DOM中的位置。
+每次循环应重新获取当前点击列数字的排列顺序。但在交换完之后应该清空，否则会出错。</p>
+<!-- content end -->
+</div>
+<br>
+<br>
+    <div id="disqus_thread"></div>
+	<div class="footer">
+		<p>© Copyright 2014 by isnowfy, Designed by isnowfy</p>
+	</div>
+</div>
+<script src="main.js"></script>
+<script id="content" type="text/mustache">
+    <h1>{{title}}</h1>
+    <div class="tag">
+    {{date}}
+    {{#tags}}
+    <a href="/#/tag/{{name}}">#{{name}}</a>
+    {{/tags}}
+    </div>
+</script>
+<script id="pagesTemplate" type="text/mustache">
+    {{#pages}}
+    <li>
+        <a href="{{path}}">{{title}}</a>
+    </li>
+    {{/pages}}
+</script>
+<script>
+$(document).ready(function() {
+    $.ajax({
+        url: "main.json",
+        type: "GET",
+        dataType: "json",
+        success: function(data) {
+            $("#title").html(data.name);
+            var pagesTemplate = Hogan.compile($("#pagesTemplate").html());
+            var pagesHtml = pagesTemplate.render({"pages": data.pages});
+            $("#pages").append(pagesHtml);
+            //path
+            var path = "task38.html";
+            //path end
+            var now = 0;
+            for (var i = 0; i < data.posts.length; ++i)
+                if (path == data.posts[i].path)
+                    now = i;
+            var post = data.posts[now];
+            var tmp = post.tags.split(" ");
+            var tags = [];
+            for (var i = 0; i < tmp.length; ++i)
+                if (tmp[i].length > 0)
+                    tags.push({"name": tmp[i]});
+            var contentTemplate = Hogan.compile($("#content").html());
+            var contentHtml = contentTemplate.render({"title": post.title, "tags": tags, "date": post.date});
+            $("#main").prepend(contentHtml);
+            if (data.disqus_shortname.length > 0) {
+                var disqus_shortname = data.disqus_shortname;
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            }
+        }
+    });
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ["\\(", "\\)"]], processEscapes: true}});
+</script>
+</body>
+</html>
