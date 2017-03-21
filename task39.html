@@ -1,0 +1,175 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="Keywords" content="blog"/>
+    <meta name="Description" content="blog"/>
+    <title>Simple</title>
+    <link rel="shortcut icon" href="/static/favicon.png"/>
+    <link rel="stylesheet" type="text/css" href="/main.css" />
+</head>
+<body>
+<div class="main">
+    <div class="header">
+    	<ul id="pages">
+            <li><a href="/">home</a></li>
+            <li><a href="/#/tags">tags</a></li>
+            <li><a href="/#/archive">archive</a></li>
+    	</ul>
+    </div>
+	<div class="wrap-header">
+	<h1>
+    <a href="/" id="title"></a>
+	</h1>
+	</div>
+<div id="md" style="display: none;">
+<!-- markdown -->
+#UI之冻结行列表格
+1. 编写思路：
+
+（1）利用面向对象的编程思想，将表格渲染的函数添加到原型中，这块其实是task38的面向对象的写法。
+
+（2）关于冻结，主要考虑下面几个因素：a. 表格冻结的时机以及需要执行的命令：
+
+      `if(window.scrollY>eletop){     
+         thRow.style.position="fixed";
+        thRow.style.top="0px";
+        thRow.nextSibling.style.display="";
+    }else{ 
+       thRow.style.position="static";
+      thRow.nextSibling.style.display="none";
+      } `
+b. 表格显示与隐藏的条件及指令：
+
+   `if(window.scrollY>(eletop+eleHeight)){
+          thRow.style.display="none";
+      }else{
+        thRow.style.display="";
+      }`
+（3）在第（2）中的a条件中，首行冻结之后脱离文档流，此时的第一行内    容立刻显示到视窗上界，不在视野中了，因而应添加一行空的，在fixed的时 候，显示，否则不显示。
+
+2. 在编写过程中遇到的一些问题：
+
+（1）window.scrollY返回文档在垂直方向已滚动的像素值；
+
+（2）thRow.nextSibling.style.display = "";是清除display样式，display将使用默认值（块元素会变成block，内联元素会变成inline）；
+
+（3）获取某个元素的首元素，用parent.children[0]，这样就不会出现子元素是文本或者注释来干扰下一步编写；
+
+（4）可以用border-collapse: collapse;将表格的边框合并为一条；
+<!-- markdown end -->
+</div>
+<div class="entry" id="main">
+<!-- content -->
+<h1 id="ui">UI之冻结行列表格</h1>
+
+<ol>
+<li>编写思路：</li>
+</ol>
+
+<p>（1）利用面向对象的编程思想，将表格渲染的函数添加到原型中，这块其实是task38的面向对象的写法。</p>
+
+<p>（2）关于冻结，主要考虑下面几个因素：a. 表格冻结的时机以及需要执行的命令：</p>
+
+<pre><code>  `if(window.scrollY&gt;eletop){     
+     thRow.style.position="fixed";
+    thRow.style.top="0px";
+    thRow.nextSibling.style.display="";
+}else{ 
+   thRow.style.position="static";
+  thRow.nextSibling.style.display="none";
+  } `
+</code></pre>
+
+<p>b. 表格显示与隐藏的条件及指令：</p>
+
+<p><code>if(window.scrollY&gt;(eletop+eleHeight)){
+          thRow.style.display="none";
+      }else{
+        thRow.style.display="";
+      }</code>
+（3）在第（2）中的a条件中，首行冻结之后脱离文档流，此时的第一行内    容立刻显示到视窗上界，不在视野中了，因而应添加一行空的，在fixed的时 候，显示，否则不显示。</p>
+
+<ol>
+<li>在编写过程中遇到的一些问题：</li>
+</ol>
+
+<p>（1）window.scrollY返回文档在垂直方向已滚动的像素值；</p>
+
+<p>（2）thRow.nextSibling.style.display = "";是清除display样式，display将使用默认值（块元素会变成block，内联元素会变成inline）；</p>
+
+<p>（3）获取某个元素的首元素，用parent.children[0]，这样就不会出现子元素是文本或者注释来干扰下一步编写；</p>
+
+<p>（4）可以用border-collapse: collapse;将表格的边框合并为一条；</p>
+<!-- content end -->
+</div>
+<br>
+<br>
+    <div id="disqus_thread"></div>
+	<div class="footer">
+		<p>© Copyright 2014 by isnowfy, Designed by isnowfy</p>
+	</div>
+</div>
+<script src="main.js"></script>
+<script id="content" type="text/mustache">
+    <h1>{{title}}</h1>
+    <div class="tag">
+    {{date}}
+    {{#tags}}
+    <a href="/#/tag/{{name}}">#{{name}}</a>
+    {{/tags}}
+    </div>
+</script>
+<script id="pagesTemplate" type="text/mustache">
+    {{#pages}}
+    <li>
+        <a href="{{path}}">{{title}}</a>
+    </li>
+    {{/pages}}
+</script>
+<script>
+$(document).ready(function() {
+    $.ajax({
+        url: "main.json",
+        type: "GET",
+        dataType: "json",
+        success: function(data) {
+            $("#title").html(data.name);
+            var pagesTemplate = Hogan.compile($("#pagesTemplate").html());
+            var pagesHtml = pagesTemplate.render({"pages": data.pages});
+            $("#pages").append(pagesHtml);
+            //path
+            var path = "task39.html";
+            //path end
+            var now = 0;
+            for (var i = 0; i < data.posts.length; ++i)
+                if (path == data.posts[i].path)
+                    now = i;
+            var post = data.posts[now];
+            var tmp = post.tags.split(" ");
+            var tags = [];
+            for (var i = 0; i < tmp.length; ++i)
+                if (tmp[i].length > 0)
+                    tags.push({"name": tmp[i]});
+            var contentTemplate = Hogan.compile($("#content").html());
+            var contentHtml = contentTemplate.render({"title": post.title, "tags": tags, "date": post.date});
+            $("#main").prepend(contentHtml);
+            if (data.disqus_shortname.length > 0) {
+                var disqus_shortname = data.disqus_shortname;
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            }
+        }
+    });
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ["\\(", "\\)"]], processEscapes: true}});
+</script>
+</body>
+</html>
