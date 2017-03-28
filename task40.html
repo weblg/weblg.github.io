@@ -1,0 +1,207 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="Keywords" content="blog"/>
+    <meta name="Description" content="blog"/>
+    <title>Simple</title>
+    <link rel="shortcut icon" href="/static/favicon.png"/>
+    <link rel="stylesheet" type="text/css" href="/main.css" />
+</head>
+<body>
+<div class="main">
+    <div class="header">
+    	<ul id="pages">
+            <li><a href="/">home</a></li>
+            <li><a href="/#/tags">tags</a></li>
+            <li><a href="/#/archive">archive</a></li>
+    	</ul>
+    </div>
+	<div class="wrap-header">
+	<h1>
+    <a href="/" id="title"></a>
+	</h1>
+	</div>
+<div id="md" style="display: none;">
+<!-- markdown -->
+1. 思路
+
+（1）首先按照网页的编写步骤，先框架再样式，把日历的静态页面写出来。先出来一个大致的样式。用table创建日历日期（包括第一行星期）的框架。此部分主要目的在于保留日历的样式；
+
+（2）js部分：
+
+a.首先动态创建元素，渲染日期选择部分 ；并未左右箭头添加增加月份与减少月份事件；切换的时候要保证月份在1-12范围内；且切换的时候要同时渲染日历显示部分（在下面详述）；
+
+b.动态渲染星期 table元素内添加th；
+
+c.根据日期选择部分的显示，获取当前的年及月，并计算本月的天数，以及本月第一天的星期，数据准备好之后渲染日历（重头戏）（单独列出来）；
+
+（3）在创建单元格的同时添加日期，但日历上分为三部分，上一月，当月，以及下月，点击非当月的日期时，应切换到点击日期的月份，同时渲染日历（先换日期选择部分，然后渲染）；
+
+（4）点击日历上当月的某一天，应使其背景字体变色，且切换到下个月，仍保留样式；因而要记录下当前点击的日期是什么，然后在渲染下一月时，对比日期，并添加样式；
+
+if(jdate==temptext&&i<deadline){
+      td[i].style.backgroundColor='#C81B01';
+      td[i].style.color='white';
+    }
+
+注意：
+
+（1）每次在渲染表格之前，都应该情况表格，是情况DOM而不是innertext;
+
+（2）渲染之前应清除DOM，每删除一行，表格的结构就变化了，你删的索引是新表格中的索引，而不是旧的表格中你期望的索引值。table.deleteRow(1);所以每次都应删除同样的索引；
+
+（3）某月的一号不应该显示在第一个格子，应该另起一行：
+
+加上if(week==0)判断，并给td[k]附上相应的值。此时标志位显得尤为重要；
+
+if(week==0){
+    flag=true;
+  }
+  if(flag){
+    k=6;
+  }else{
+    k=week-1;
+  }
+
+（4）点击非当月的td，切换到非当月的时候，给此日期添加样式：需要在点击的时候记录下点击时候的日期，并在渲染的时候进行日期对比；
+
+（5）如果点击到下一个月，但是下一个月没有31号，if(temptext>totalDay){
+      if(jdate==1&&i<deadline){
+        td[i].style.backgroundColor='#C81B01';
+        td[i].style.color='white';
+        temptext=1;//加上这个的原因是2月会显示1号，但是3月由于有31号，所以就会让3月的31号有背景而不是3月1号有背景。
+      }
+}
+
+（6）全局变量显得尤为重要，temptext随时记录当前点击的日期；
+
+（7）多多调试，善于思考，一个功能一个功能，慢慢实现；
+
+
+
+
+
+<!-- markdown end -->
+</div>
+<div class="entry" id="main">
+<!-- content -->
+<ol>
+<li>思路</li>
+</ol>
+
+<p>（1）首先按照网页的编写步骤，先框架再样式，把日历的静态页面写出来。先出来一个大致的样式。用table创建日历日期（包括第一行星期）的框架。此部分主要目的在于保留日历的样式；</p>
+
+<p>（2）js部分：</p>
+
+<p>a.首先动态创建元素，渲染日期选择部分 ；并未左右箭头添加增加月份与减少月份事件；切换的时候要保证月份在1-12范围内；且切换的时候要同时渲染日历显示部分（在下面详述）；</p>
+
+<p>b.动态渲染星期 table元素内添加th；</p>
+
+<p>c.根据日期选择部分的显示，获取当前的年及月，并计算本月的天数，以及本月第一天的星期，数据准备好之后渲染日历（重头戏）（单独列出来）；</p>
+
+<p>（3）在创建单元格的同时添加日期，但日历上分为三部分，上一月，当月，以及下月，点击非当月的日期时，应切换到点击日期的月份，同时渲染日历（先换日期选择部分，然后渲染）；</p>
+
+<p>（4）点击日历上当月的某一天，应使其背景字体变色，且切换到下个月，仍保留样式；因而要记录下当前点击的日期是什么，然后在渲染下一月时，对比日期，并添加样式；</p>
+
+<p>if(jdate==temptext&amp;&amp;i<deadline){ td[i].style.backgroundcolor="#C81B01" ;="" td[i].style.color="white" }<="" p="">
+
+</deadline){></p><p>注意：</p>
+
+<p>（1）每次在渲染表格之前，都应该情况表格，是情况DOM而不是innertext;</p>
+
+<p>（2）渲染之前应清除DOM，每删除一行，表格的结构就变化了，你删的索引是新表格中的索引，而不是旧的表格中你期望的索引值。table.deleteRow(1);所以每次都应删除同样的索引；</p>
+
+<p>（3）某月的一号不应该显示在第一个格子，应该另起一行：</p>
+
+<p>加上if(week==0)判断，并给td[k]附上相应的值。此时标志位显得尤为重要；</p>
+
+<p>if(week==0){
+    flag=true;
+  }
+  if(flag){
+    k=6;
+  }else{
+    k=week-1;
+  }</p>
+
+<p>（4）点击非当月的td，切换到非当月的时候，给此日期添加样式：需要在点击的时候记录下点击时候的日期，并在渲染的时候进行日期对比；</p>
+
+<p>（5）如果点击到下一个月，但是下一个月没有31号，if(temptext&gt;totalDay){
+      if(jdate==1&amp;&amp;i<deadline){ td[i].style.backgroundcolor="#C81B01" ;="" td[i].style.color="white" temptext="1;//加上这个的原因是2月会显示1号，但是3月由于有31号，所以就会让3月的31号有背景而不是3月1号有背景。" }="" }<="" p="">
+
+</deadline){></p><p>（6）全局变量显得尤为重要，temptext随时记录当前点击的日期；</p>
+
+<p>（7）多多调试，善于思考，一个功能一个功能，慢慢实现；</p>
+<!-- content end -->
+</div>
+<br>
+<br>
+    <div id="disqus_thread"></div>
+	<div class="footer">
+		<p>© Copyright 2014 by isnowfy, Designed by isnowfy</p>
+	</div>
+</div>
+<script src="main.js"></script>
+<script id="content" type="text/mustache">
+    <h1>{{title}}</h1>
+    <div class="tag">
+    {{date}}
+    {{#tags}}
+    <a href="/#/tag/{{name}}">#{{name}}</a>
+    {{/tags}}
+    </div>
+</script>
+<script id="pagesTemplate" type="text/mustache">
+    {{#pages}}
+    <li>
+        <a href="{{path}}">{{title}}</a>
+    </li>
+    {{/pages}}
+</script>
+<script>
+$(document).ready(function() {
+    $.ajax({
+        url: "main.json",
+        type: "GET",
+        dataType: "json",
+        success: function(data) {
+            $("#title").html(data.name);
+            var pagesTemplate = Hogan.compile($("#pagesTemplate").html());
+            var pagesHtml = pagesTemplate.render({"pages": data.pages});
+            $("#pages").append(pagesHtml);
+            //path
+            var path = "task40.html";
+            //path end
+            var now = 0;
+            for (var i = 0; i < data.posts.length; ++i)
+                if (path == data.posts[i].path)
+                    now = i;
+            var post = data.posts[now];
+            var tmp = post.tags.split(" ");
+            var tags = [];
+            for (var i = 0; i < tmp.length; ++i)
+                if (tmp[i].length > 0)
+                    tags.push({"name": tmp[i]});
+            var contentTemplate = Hogan.compile($("#content").html());
+            var contentHtml = contentTemplate.render({"title": post.title, "tags": tags, "date": post.date});
+            $("#main").prepend(contentHtml);
+            if (data.disqus_shortname.length > 0) {
+                var disqus_shortname = data.disqus_shortname;
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            }
+        }
+    });
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ["\\(", "\\)"]], processEscapes: true}});
+</script>
+</body>
+</html>
