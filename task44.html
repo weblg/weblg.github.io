@@ -1,0 +1,141 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="Keywords" content="blog"/>
+    <meta name="Description" content="blog"/>
+    <title>Simple</title>
+    <link rel="shortcut icon" href="/static/favicon.png"/>
+    <link rel="stylesheet" type="text/css" href="/main.css" />
+</head>
+<body>
+<div class="main">
+    <div class="header">
+    	<ul id="pages">
+            <li><a href="/">home</a></li>
+            <li><a href="/#/tags">tags</a></li>
+            <li><a href="/#/archive">archive</a></li>
+    	</ul>
+    </div>
+	<div class="wrap-header">
+	<h1>
+    <a href="/" id="title"></a>
+	</h1>
+	</div>
+<div id="md" style="display: none;">
+<!-- markdown -->
+1. 写瀑布流的思路：（1）先在html中写出框架，固定列数这（以4列为例），用css设置样式；（2）判断这四列中高度最小的，并将新创建的div添加到此列下方；（3）按照要求实现点击某个div将屏幕遮罩，并在屏幕中央显示此div.这块比较容易实现，添加事件响应函数，且逻辑清楚即可；
+
+2. 实现过程中的一些问题：
+
+（1）为方便起见增加一个按钮，每点击一次，在瀑布布局中增加一个新的div;
+
+（2）若想让新增加的div显示在瀑布流中的正确位置，需要在create的时候设置其left,top；
+
+（3）用inline-block，不要用float，能够让新添加的div按预期显示；
+
+（4）全局变量的重要性：arrheight保存着四列的高度，并在添加新的div的时候不断更新；需要在此数组中找到最大和最小的高度；最大的高度用于不断更新container的高度；最小的高度用于告知将新的div显示在这四列中的哪一列；
+
+（5）有些有关浏览器的距离搞的不是很清楚，可以看看这个链接，[链接](http://www.cnblogs.com/fullhouse/archive/2012/01/16/2324131.html)；
+
+（6）reset重置的时候，不仅需要情况inputtext中的文本，还应清空container中包含的div，以及container现在的高度，当然也不能够忘记arrheight也是需要reset的；
+
+（7）还有许多仍待改进的地方：ajax动态加载等；
+
+（8）谨记：在写代码之前一定不能瞎写，要有一定的思路，逻辑性，首先实现什么功能，然后是什么，在实现的过程中应该注意些什么，都是需要铭记于心的。
+<!-- markdown end -->
+</div>
+<div class="entry" id="main">
+<!-- content -->
+<ol>
+<li><p>写瀑布流的思路：（1）先在html中写出框架，固定列数这（以4列为例），用css设置样式；（2）判断这四列中高度最小的，并将新创建的div添加到此列下方；（3）按照要求实现点击某个div将屏幕遮罩，并在屏幕中央显示此div.这块比较容易实现，添加事件响应函数，且逻辑清楚即可；</p></li>
+<li><p>实现过程中的一些问题：</p></li>
+</ol>
+
+<p>（1）为方便起见增加一个按钮，每点击一次，在瀑布布局中增加一个新的div;</p>
+
+<p>（2）若想让新增加的div显示在瀑布流中的正确位置，需要在create的时候设置其left,top；</p>
+
+<p>（3）用inline-block，不要用float，能够让新添加的div按预期显示；</p>
+
+<p>（4）全局变量的重要性：arrheight保存着四列的高度，并在添加新的div的时候不断更新；需要在此数组中找到最大和最小的高度；最大的高度用于不断更新container的高度；最小的高度用于告知将新的div显示在这四列中的哪一列；</p>
+
+<p>（5）有些有关浏览器的距离搞的不是很清楚，可以看看这个链接，<a href="http://www.cnblogs.com/fullhouse/archive/2012/01/16/2324131.html">链接</a>；</p>
+
+<p>（6）reset重置的时候，不仅需要情况inputtext中的文本，还应清空container中包含的div，以及container现在的高度，当然也不能够忘记arrheight也是需要reset的；</p>
+
+<p>（7）还有许多仍待改进的地方：ajax动态加载等；</p>
+
+<p>（8）谨记：在写代码之前一定不能瞎写，要有一定的思路，逻辑性，首先实现什么功能，然后是什么，在实现的过程中应该注意些什么，都是需要铭记于心的。</p>
+<!-- content end -->
+</div>
+<br>
+<br>
+    <div id="disqus_thread"></div>
+	<div class="footer">
+		<p>© Copyright 2014 by isnowfy, Designed by isnowfy</p>
+	</div>
+</div>
+<script src="main.js"></script>
+<script id="content" type="text/mustache">
+    <h1>{{title}}</h1>
+    <div class="tag">
+    {{date}}
+    {{#tags}}
+    <a href="/#/tag/{{name}}">#{{name}}</a>
+    {{/tags}}
+    </div>
+</script>
+<script id="pagesTemplate" type="text/mustache">
+    {{#pages}}
+    <li>
+        <a href="{{path}}">{{title}}</a>
+    </li>
+    {{/pages}}
+</script>
+<script>
+$(document).ready(function() {
+    $.ajax({
+        url: "main.json",
+        type: "GET",
+        dataType: "json",
+        success: function(data) {
+            $("#title").html(data.name);
+            var pagesTemplate = Hogan.compile($("#pagesTemplate").html());
+            var pagesHtml = pagesTemplate.render({"pages": data.pages});
+            $("#pages").append(pagesHtml);
+            //path
+            var path = "task44.html";
+            //path end
+            var now = 0;
+            for (var i = 0; i < data.posts.length; ++i)
+                if (path == data.posts[i].path)
+                    now = i;
+            var post = data.posts[now];
+            var tmp = post.tags.split(" ");
+            var tags = [];
+            for (var i = 0; i < tmp.length; ++i)
+                if (tmp[i].length > 0)
+                    tags.push({"name": tmp[i]});
+            var contentTemplate = Hogan.compile($("#content").html());
+            var contentHtml = contentTemplate.render({"title": post.title, "tags": tags, "date": post.date});
+            $("#main").prepend(contentHtml);
+            if (data.disqus_shortname.length > 0) {
+                var disqus_shortname = data.disqus_shortname;
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            }
+        }
+    });
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ["\\(", "\\)"]], processEscapes: true}});
+</script>
+</body>
+</html>
