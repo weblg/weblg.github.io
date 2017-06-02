@@ -1,0 +1,138 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="Keywords" content="blog"/>
+    <meta name="Description" content="blog"/>
+    <title>Simple</title>
+    <link rel="shortcut icon" href="/static/favicon.png"/>
+    <link rel="stylesheet" type="text/css" href="/main.css" />
+</head>
+<body>
+<div class="main">
+    <div class="header">
+    	<ul id="pages">
+            <li><a href="/">home</a></li>
+            <li><a href="/#/tags">tags</a></li>
+            <li><a href="/#/archive">archive</a></li>
+    	</ul>
+    </div>
+	<div class="wrap-header">
+	<h1>
+    <a href="/" id="title"></a>
+	</h1>
+	</div>
+<div id="md" style="display: none;">
+<!-- markdown -->
+1. 写木桶布局的思路：（1）先在.html文件中写出要进行布局的div包含的图片的框架(当然如果能够动态加载图片更好)，并让其在container中显示，设置样式，让其先按照行内元素显示；（2）重点：利用js创建每行的框架并将这些图片按照需求添加到每行创建的rowdiv中，比如:此任务要求每行添加3-6幅图；
+
+2. 在写的过程中遇到的一些问题：
+
+（1）为了计算每个包含图片的div显示宽高比例，先初始设定木桶每圈的高度：200px,当然150px,300px,都是可以的，浏览器显示美观即可；
+
+（2）根据包含图片的div自身的宽高算出每个imagediv的比例，根据设置的height=200px计算每个div显示的宽度，将宽度相加，注意每组成一行满足的条件：if(**(**width>this.container.clientWidth&&count>min**)**||count>max)；
+
+（3）需要注意的问题：imagediv不是真正的数组，Array.prototype.slice.call的作用就是将一个DOM NodeList 转换成一个数组，此文章的解释很好[链接1](http://www.cnblogs.com/huanghongxia/p/4045844.html)；
+
+（4）div里包含img底部多出3px的解决办法：这个Bug真是十分有意思，不过有N多种解决办法！  1、设置div{ font-size: 0}  2、设置img{ display: block}  3、设置img{ vertical-align:top;}  当然推荐第二种方法，让img对象成为块级元素。出现白边的原因：[链接2](http://jingyan.baidu.com/article/7082dc1c69dc6fe40a89bdfe.html)；
+
+（5）按照图片计算出的心得rowdiv的样式非常重要：
+
+a.white-space:nowrap; 文本不会换行，文本会在在同一行上继续，直到遇到 <br> 标签为止；否则，因为经常情况下，最后一个图片都会超出container的宽度，导致不能显示；
+
+b.overflow:hidden;为了将所有的图片正常显示在container中，整齐起见，应该设置，否则会参差不齐；
+
+<!-- markdown end -->
+</div>
+<div class="entry" id="main">
+<!-- content -->
+<ol>
+<li><p>写木桶布局的思路：（1）先在.html文件中写出要进行布局的div包含的图片的框架(当然如果能够动态加载图片更好)，并让其在container中显示，设置样式，让其先按照行内元素显示；（2）重点：利用js创建每行的框架并将这些图片按照需求添加到每行创建的rowdiv中，比如:此任务要求每行添加3-6幅图；</p></li>
+<li><p>在写的过程中遇到的一些问题：</p></li>
+</ol>
+
+<p>（1）为了计算每个包含图片的div显示宽高比例，先初始设定木桶每圈的高度：200px,当然150px,300px,都是可以的，浏览器显示美观即可；</p>
+
+<p>（2）根据包含图片的div自身的宽高算出每个imagediv的比例，根据设置的height=200px计算每个div显示的宽度，将宽度相加，注意每组成一行满足的条件：if(<strong>(</strong>width&gt;this.container.clientWidth&amp;&amp;count&gt;min<strong>)</strong>||count&gt;max)；</p>
+
+<p>（3）需要注意的问题：imagediv不是真正的数组，Array.prototype.slice.call的作用就是将一个DOM NodeList 转换成一个数组，此文章的解释很好<a href="http://www.cnblogs.com/huanghongxia/p/4045844.html">链接1</a>；</p>
+
+<p>（4）div里包含img底部多出3px的解决办法：这个Bug真是十分有意思，不过有N多种解决办法！  1、设置div{ font-size: 0}  2、设置img{ display: block}  3、设置img{ vertical-align:top;}  当然推荐第二种方法，让img对象成为块级元素。出现白边的原因：<a href="http://jingyan.baidu.com/article/7082dc1c69dc6fe40a89bdfe.html">链接2</a>；</p>
+
+<p>（5）按照图片计算出的心得rowdiv的样式非常重要：</p>
+
+<p>a.white-space:nowrap; 文本不会换行，文本会在在同一行上继续，直到遇到 <br> 标签为止；否则，因为经常情况下，最后一个图片都会超出container的宽度，导致不能显示；</p>
+
+<p>b.overflow:hidden;为了将所有的图片正常显示在container中，整齐起见，应该设置，否则会参差不齐；</p>
+<!-- content end -->
+</div>
+<br>
+<br>
+    <div id="disqus_thread"></div>
+	<div class="footer">
+		<p>© Copyright 2014 by isnowfy, Designed by isnowfy</p>
+	</div>
+</div>
+<script src="main.js"></script>
+<script id="content" type="text/mustache">
+    <h1>{{title}}</h1>
+    <div class="tag">
+    {{date}}
+    {{#tags}}
+    <a href="/#/tag/{{name}}">#{{name}}</a>
+    {{/tags}}
+    </div>
+</script>
+<script id="pagesTemplate" type="text/mustache">
+    {{#pages}}
+    <li>
+        <a href="{{path}}">{{title}}</a>
+    </li>
+    {{/pages}}
+</script>
+<script>
+$(document).ready(function() {
+    $.ajax({
+        url: "main.json",
+        type: "GET",
+        dataType: "json",
+        success: function(data) {
+            $("#title").html(data.name);
+            var pagesTemplate = Hogan.compile($("#pagesTemplate").html());
+            var pagesHtml = pagesTemplate.render({"pages": data.pages});
+            $("#pages").append(pagesHtml);
+            //path
+            var path = "task45.html";
+            //path end
+            var now = 0;
+            for (var i = 0; i < data.posts.length; ++i)
+                if (path == data.posts[i].path)
+                    now = i;
+            var post = data.posts[now];
+            var tmp = post.tags.split(" ");
+            var tags = [];
+            for (var i = 0; i < tmp.length; ++i)
+                if (tmp[i].length > 0)
+                    tags.push({"name": tmp[i]});
+            var contentTemplate = Hogan.compile($("#content").html());
+            var contentHtml = contentTemplate.render({"title": post.title, "tags": tags, "date": post.date});
+            $("#main").prepend(contentHtml);
+            if (data.disqus_shortname.length > 0) {
+                var disqus_shortname = data.disqus_shortname;
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            }
+        }
+    });
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ["\\(", "\\)"]], processEscapes: true}});
+</script>
+</body>
+</html>
