@@ -1,0 +1,175 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="Keywords" content="blog"/>
+    <meta name="Description" content="blog"/>
+    <title>Simple</title>
+    <link rel="shortcut icon" href="/static/favicon.png"/>
+    <link rel="stylesheet" type="text/css" href="/main.css" />
+</head>
+<body>
+<div class="main">
+    <div class="header">
+    	<ul id="pages">
+            <li><a href="/">home</a></li>
+            <li><a href="/#/tags">tags</a></li>
+            <li><a href="/#/archive">archive</a></li>
+    	</ul>
+    </div>
+	<div class="wrap-header">
+	<h1>
+    <a href="/" id="title"></a>
+	</h1>
+	</div>
+<div id="md" style="display: none;">
+<!-- markdown -->
+这段时间在牛客网上做一些编程练习，针对前端部分的编程能力测评，很符合我平时，用原生js编写的习惯，且在本地调试好就可以直接粘贴在上面。但是在利用js(Node 0.12.12)做一些编程机试题时，即使在本地调试好，完全通过，但是在牛客网上总是出现错误，[关于牛客网的输入输出](http://www.jianshu.com/p/70a04abd0823)，这个写的很好，但当时看完还是不会用，下面是自己的一些浅陋的理解：
+（1）**var readline = require('readline');
+const rl = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout
+});
+rl.on('line', function(line){**
+
+   var tokens = line.split(' ');
+
+*//此部分为，此题目要求的代码实现，最后不用忘记console.log();*
+    console.log(parseInt(tokens[0]) + parseInt(tokens[1]));
+**});**
+
+注释：其中，加粗部分的代码是结构，然后往里面填充符合题意的代码即可；line’事件，这个事件就是在用户输完一行，按下回车后就会触发的事件；这种结构适用于用户输入只是一行且输出一个结果，或者数据需要一行一行处理，且最后输出多行结果；如果，要求用户输入多行，且多行数据要同时处理，并输出一个结果，就应该用另一种方法；
+
+（2）检测“end”事件，并进行数据处理
+**process.stdin.resume();
+process.stdin.setEncoding('ascii');
+ 
+var input = "";
+var input_array = "";
+ 
+process.stdin.on('data', function (data) {
+  input += data;
+});
+ 
+process.stdin.on('end', function () {
+
+  input_array = input.split("\n");
+//输入自己的代码 
+      console.log();
+   
+});**
+
+此部分为利用“end”事件检测时的结构，在"end"事件中将多行数据用split()函数按照检测“\n”分成数组，再进行处理。当然这些结构很多地方都有写到，写这些也是对自己理解的一个巩固。
+
+<!-- markdown end -->
+</div>
+<div class="entry" id="main">
+<!-- content -->
+<p>这段时间在牛客网上做一些编程练习，针对前端部分的编程能力测评，很符合我平时，用原生js编写的习惯，且在本地调试好就可以直接粘贴在上面。但是在利用js(Node 0.12.12)做一些编程机试题时，即使在本地调试好，完全通过，但是在牛客网上总是出现错误，<a href="http://www.jianshu.com/p/70a04abd0823">关于牛客网的输入输出</a>，这个写的很好，但当时看完还是不会用，下面是自己的一些浅陋的理解：
+（1）<strong>var readline = require('readline');
+const rl = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout
+});
+rl.on('line', function(line){</strong></p>
+
+<p>var tokens = line.split(' ');</p>
+
+<p><em>//此部分为，此题目要求的代码实现，最后不用忘记console.log();</em>
+    console.log(parseInt(tokens[0]) + parseInt(tokens[1]));
+<strong>});</strong></p>
+
+<p>注释：其中，加粗部分的代码是结构，然后往里面填充符合题意的代码即可；line’事件，这个事件就是在用户输完一行，按下回车后就会触发的事件；这种结构适用于用户输入只是一行且输出一个结果，或者数据需要一行一行处理，且最后输出多行结果；如果，要求用户输入多行，且多行数据要同时处理，并输出一个结果，就应该用另一种方法；</p>
+
+<p>（2）检测“end”事件，并进行数据处理
+**process.stdin.resume();
+process.stdin.setEncoding('ascii');</p>
+
+<p>var input = "";
+var input_array = "";</p>
+
+<p>process.stdin.on('data', function (data) {
+  input += data;
+});</p>
+
+<p>process.stdin.on('end', function () {</p>
+
+<p>input_array = input.split("\n");
+//输入自己的代码 
+      console.log();</p>
+
+<p>});**</p>
+
+<p>此部分为利用“end”事件检测时的结构，在"end"事件中将多行数据用split()函数按照检测“\n”分成数组，再进行处理。当然这些结构很多地方都有写到，写这些也是对自己理解的一个巩固。</p>
+<!-- content end -->
+</div>
+<br>
+<br>
+    <div id="disqus_thread"></div>
+	<div class="footer">
+		<p>© Copyright 2014 by isnowfy, Designed by isnowfy</p>
+	</div>
+</div>
+<script src="main.js"></script>
+<script id="content" type="text/mustache">
+    <h1>{{title}}</h1>
+    <div class="tag">
+    {{date}}
+    {{#tags}}
+    <a href="/#/tag/{{name}}">#{{name}}</a>
+    {{/tags}}
+    </div>
+</script>
+<script id="pagesTemplate" type="text/mustache">
+    {{#pages}}
+    <li>
+        <a href="{{path}}">{{title}}</a>
+    </li>
+    {{/pages}}
+</script>
+<script>
+$(document).ready(function() {
+    $.ajax({
+        url: "main.json",
+        type: "GET",
+        dataType: "json",
+        success: function(data) {
+            $("#title").html(data.name);
+            var pagesTemplate = Hogan.compile($("#pagesTemplate").html());
+            var pagesHtml = pagesTemplate.render({"pages": data.pages});
+            $("#pages").append(pagesHtml);
+            //path
+            var path = "task613.html";
+            //path end
+            var now = 0;
+            for (var i = 0; i < data.posts.length; ++i)
+                if (path == data.posts[i].path)
+                    now = i;
+            var post = data.posts[now];
+            var tmp = post.tags.split(" ");
+            var tags = [];
+            for (var i = 0; i < tmp.length; ++i)
+                if (tmp[i].length > 0)
+                    tags.push({"name": tmp[i]});
+            var contentTemplate = Hogan.compile($("#content").html());
+            var contentHtml = contentTemplate.render({"title": post.title, "tags": tags, "date": post.date});
+            $("#main").prepend(contentHtml);
+            if (data.disqus_shortname.length > 0) {
+                var disqus_shortname = data.disqus_shortname;
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            }
+        }
+    });
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ["\\(", "\\)"]], processEscapes: true}});
+</script>
+</body>
+</html>
